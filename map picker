@@ -2,14 +2,15 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>اختيار موقع التسليم</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<title>اختيار نقطة التسليم</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+ integrity="sha256-o9N1j8pA2Bvk+9+z+YDp0s+HRH2pvI6z3b6u6d6Y0Mo="
+ crossorigin=""/>
 <style>
-  #map { height: 400px; }
+  #map { height: 400px; width: 100%; }
   body { font-family: sans-serif; padding: 10px; }
 </style>
 </head>
-
 <body>
 
 <h3>📍 اختر نقطة التسليم</h3>
@@ -17,46 +18,41 @@
 
 <div id="map"></div>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+ integrity="sha256-9+0D1yU0u0sX1Rkg5l6+O2xXlVcxFV3pG1qslMjgN4U="
+ crossorigin=""></script>
 
 <script>
-
 // Center map on Djelfa
-// Djelfa coordinates: 34.6728° N, 3.2630° E
 var map = L.map('map').setView([34.6728, 3.2630], 13);
 
-// Light mode (default OpenStreetMap tiles)
+// OpenStreetMap tiles (light mode)
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19
 }).addTo(map);
 
 var marker;
 
-// On click: choose drop-off location
+// Click to select drop-off point
 map.on('click', function(e) {
     var lat = e.latlng.lat.toFixed(6);
     var lng = e.latlng.lng.toFixed(6);
 
-    // Remove previous marker if exists
-    if (marker) {
-        map.removeLayer(marker);
-    }
+    if (marker) map.removeLayer(marker); // remove old marker
 
-    // Add new marker
     marker = L.marker([lat, lng]).addTo(map);
 
-    // Show coordinates to user
     document.getElementById("coords").innerText = 
       "📍 الإحداثيات: " + lat + ", " + lng;
 
-    // Send coordinates back to parent iframe (optional)
+    // Optional: send to parent iframe
     window.parent.postMessage(
         { dropoff_lat: lat, dropoff_lng: lng },
         "*"
     );
 });
-
 </script>
 
 </body>
 </html>
+
